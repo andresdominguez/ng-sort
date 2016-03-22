@@ -33,26 +33,26 @@ public class NgSorter {
 
   public void sort() {
     final String fileText = document.getText();
-    final List<JSDocTag> paramsInComments = NgSorter.findParamsInComments(commentAndParamList.comment);
-    final List<JSDocTag> sortedParams = NgSorter.getSortedCommentParams(paramsInComments);
+    final List<JSDocTag> paramsInComments = findParamsInComments(commentAndParamList.comment);
+    final List<JSDocTag> sortedParams = getSortedCommentParams(paramsInComments);
 
     Collections.reverse(paramsInComments);
 
     // Replace from bottom to top. Start with the function args.
-    NgSorter.sortFunctionArgs(commentAndParamList.parameterList, document);
+    sortFunctionArgs(commentAndParamList.parameterList, document);
 
     // Replace @param tags in reverse order.
     for (int i = 0; i < paramsInComments.size(); i++) {
       JSDocTag jsDocTag = sortedParams.get(i);
-      String substring = NgSorter.getParamText(fileText, jsDocTag);
+      String substring = getParamText(fileText, jsDocTag);
 
-      TextRange range = NgSorter.getTextRange(paramsInComments.get(i));
+      TextRange range = getTextRange(paramsInComments.get(i));
 
       document.replaceString(range.getStartOffset(), range.getEndOffset(), substring);
     }
   }
 
-  static void sortFunctionArgs(JSParameterList parameterList, Document document) {
+  private void sortFunctionArgs(JSParameterList parameterList, Document document) {
     List<String> sortedArgs = new ArrayList<>();
     for (JSParameter parameter : parameterList.getParameters()) {
       sortedArgs.add(parameter.getName());
@@ -67,7 +67,7 @@ public class NgSorter {
   }
 
   @NotNull
-  static List<JSDocTag> findParamsInComments(PsiComment comment) {
+  private List<JSDocTag> findParamsInComments(PsiComment comment) {
     return Lists.newArrayList(Iterables.filter(
         PsiTreeUtil.findChildrenOfType(comment, JSDocTag.class),
         new Predicate<JSDocTag>() {
@@ -79,7 +79,7 @@ public class NgSorter {
   }
 
   @NotNull
-  static List<JSDocTag> getSortedCommentParams(List<JSDocTag> paramsInComments) {
+  private List<JSDocTag> getSortedCommentParams(List<JSDocTag> paramsInComments) {
     List<JSDocTag> sortedParams = new ArrayList<>(paramsInComments);
     Collections.sort(sortedParams, new Comparator<JSDocTag>() {
       @Override
@@ -92,7 +92,7 @@ public class NgSorter {
     return sortedParams;
   }
 
-  static TextRange getTextRange(JSDocTag jsDocTag) {
+  private TextRange getTextRange(JSDocTag jsDocTag) {
     TextRange tr = jsDocTag.getTextRange();
     int endOffset = tr.getEndOffset();
 
@@ -111,7 +111,7 @@ public class NgSorter {
   }
 
   @NotNull
-  static String getParamText(String fileText, JSDocTag jsDocTag) {
+  private String getParamText(String fileText, JSDocTag jsDocTag) {
     TextRange sortedParam = getTextRange(jsDocTag);
     return fileText.substring(sortedParam.getStartOffset(), sortedParam.getEndOffset());
   }
