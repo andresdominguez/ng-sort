@@ -71,18 +71,13 @@ public class SortArgsAction extends AnAction {
     // theName: function()
     // var theName = function()
     // MyModule.theName = function()
-    for (Class elementType : ELEMENT_TYPES) {
-      PsiElement parent = PsiTreeUtil.getParentOfType(ngInjectElement, elementType);
-      if (parent != null) {
-        Collection<JSParameterList> parameterLists = PsiTreeUtil.findChildrenOfType(parent, JSParameterList.class);
-        if (parameterLists.size() != 1) {
-          return null;
-        }
-
-        return parameterLists.iterator().next();
-      }
+    PsiElement parent = PsiTreeUtil.getParentOfType(ngInjectElement, ELEMENT_TYPES);
+    if (parent == null) {
+      return null;
     }
-    return null;
+    List<JSParameterList> parameterLists =
+        Lists.newArrayList(PsiTreeUtil.findChildrenOfType(parent, JSParameterList.class));
+    return parameterLists.size() == 1 ? parameterLists.get(0) : null;
   }
 
   @NotNull
