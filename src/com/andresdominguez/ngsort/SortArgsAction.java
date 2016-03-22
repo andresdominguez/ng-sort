@@ -3,6 +3,7 @@ package com.andresdominguez.ngsort;
 import com.google.common.collect.Lists;
 import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.lang.javascript.psi.JSProperty;
+import com.intellij.lang.javascript.psi.JSVarStatement;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -51,15 +52,37 @@ public class SortArgsAction extends AnAction {
   @Nullable
   private CommentAndParamList findCommentAndParamList(PsiElement ngInjectElement) {
     PsiComment comment = PsiTreeUtil.getParentOfType(ngInjectElement, PsiComment.class);
-    JSProperty jsProperty = PsiTreeUtil.getParentOfType(ngInjectElement, JSProperty.class);
 
-    Collection<JSParameterList> parameterLists = PsiTreeUtil.findChildrenOfType(jsProperty, JSParameterList.class);
+    JSParameterList parameterList = findParameterList(ngInjectElement);
+    if (parameterList == null) {
+      return null;
+    }
+
+    return new CommentAndParamList(parameterList, comment);
+  }
+
+  @Nullable
+  private JSParameterList findParameterList(PsiElement ngInjectElement) {
+    // The function can be declared as:
+    // theName: function()
+    // or
+    // var theName = function
+    PsiElement argsParent = null;
+    JSProperty jsProperty = PsiTreeUtil.getParentOfType(ngInjectElement, JSProperty.class);
+    JSVarStatement jsVarStatement = PsiTreeUtil.getParentOfType(ngInjectElement, JSVarStatement.class);
+
+    if (jsProperty != null) {
+      argsParent = jsProperty;
+    } else if (jsVarStatement != null) {
+      argsParent = jsVarStatement;
+    }
+
+    Collection<JSParameterList> parameterLists = PsiTreeUtil.findChildrenOfType(argsParent, JSParameterList.class);
     if (parameterLists.size() != 1) {
       return null;
     }
-    JSParameterList parameterList = parameterLists.iterator().next();
 
-    return new CommentAndParamList(parameterList, comment);
+    return parameterLists.iterator().next();
   }
 
   @NotNull
@@ -77,13 +100,15 @@ public class SortArgsAction extends AnAction {
   }
 
   List<Integer> findNgInjectIndices(PsiFile psiFile) {
+    String NG_INJECT = "@ngInject";
+
     String text = psiFile.getText();
     List<Integer> indices = Lists.newArrayList();
 
-    int index = text.indexOf("@ngInject");
+    int index = text.indexOf(NG_INJECT);
     while (index != -1) {
       indices.add(index);
-      index = text.indexOf("@ngInject", index + 1);
+      index = text.indexOf(NG_INJECT, index + 1);
     }
 
     return indices;
