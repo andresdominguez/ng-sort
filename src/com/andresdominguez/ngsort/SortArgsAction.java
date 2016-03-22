@@ -1,4 +1,4 @@
-package com.google.modulator;
+package com.andresdominguez.ngsort;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;

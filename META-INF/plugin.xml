@@ -37,7 +37,7 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="sortArgs" class="com.google.modulator.SortArgsAction" text="ngsort" description="Sort args"/>
+    <action id="sortArgs" class="com.andresdominguez.ngsort.SortArgsAction" text="ngsort" description="Sort args"/>
   </actions>
 
 </idea-plugin>
