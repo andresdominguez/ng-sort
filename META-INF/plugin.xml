@@ -1,0 +1,43 @@
+<idea-plugin version="2">
+  <id>com.yourcompany.unique.plugin.id</id>
+  <name>Modulator</name>
+  <version>1.0</version>
+  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+  <description><![CDATA[
+    Auto-complete google closure modules
+  ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="131"/>
+
+  <depends>com.intellij.modules.lang</depends>
+  <depends>JavaScript</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <completion.contributor implementationClass="com.google.modulator.modules.require.ModuleContributor" language="any" order="FIRST" />
+    <completion.contributor implementationClass="com.google.modulator.params.ParamsContributor" language="any" order="FIRST" />
+    <completion.contributor implementationClass="com.google.modulator.modules.jsdoc.JsDocContributor" language="any" order="FIRST" />
+
+    <applicationConfigurable instance="com.google.modulator.config.ModulatorConfigurable"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="sortArgs" class="com.google.modulator.SortArgsAction" text="ngsort" description="Sort args"/>
+  </actions>
+
+</idea-plugin>

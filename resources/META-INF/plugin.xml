@@ -2,7 +2,7 @@
   <id>com.andresdominguez.ngsort</id>
   <name>NgSort</name>
   <version>1.0</version>
-  <vendor email="code@karateca.com" url="http://www.yourcompany.com">Andres Dominguez</vendor>
+  <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
       Enter short description for your plugin here.<br>
@@ -15,21 +15,25 @@
     ]]>
   </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+  <idea-version since-build="131"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
   <depends>com.intellij.modules.lang</depends>
   <depends>JavaScript</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-
   </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
 
   <actions>
     <!-- Add your actions here -->
-    <action id="ngSort" class="ngsort.NgSortAction" text="Sort arguments" description="Sort @ngInject arguments"/>
+    <action id="ngSort" class="com.google.modulator.SortArgsAction" text="Sort arguments" description="Sort @ngInject arguments"/>
   </actions>
 
 </idea-plugin>
