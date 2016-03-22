@@ -18,28 +18,29 @@ public class NgRequiredAction extends AnAction {
 
   @Override
   public void actionPerformed(AnActionEvent e) {
-    final Editor editor = e.getData(PlatformDataKeys.EDITOR);
+    Editor editor = e.getData(PlatformDataKeys.EDITOR);
     PsiFile psiFile = e.getData(CommonDataKeys.PSI_FILE);
     if (editor == null || psiFile == null) {
       return;
     }
 
     PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    final JSDocTag jsDocTag = PsiTreeUtil.getParentOfType(element, JSDocTag.class);
+    JSDocTag jsDocTag = PsiTreeUtil.getParentOfType(element, JSDocTag.class);
 
     if (jsDocTag == null || jsDocTag.getValue() == null) {
       return;
     }
+
     final JSDocTagValue value = jsDocTag.getValue();
     final TextRange textRange = value.getTextRange();
-
     final Document document = editor.getDocument();
+
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         String replacement = value.getText().replace("{", "{!");
         document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), replacement);
       }
-    }, "ng sort", null);
+    }, "make required", null);
   }
 }
