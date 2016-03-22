@@ -152,14 +152,4 @@ public class SortArgsAction extends AnAction {
 
     return new CommentAndParamList(parameterList, comment);
   }
-
-  class CommentAndParamList {
-    final JSParameterList parameterList;
-    final PsiComment comment;
-
-    CommentAndParamList(JSParameterList parameterList, PsiComment comment) {
-      this.parameterList = parameterList;
-      this.comment = comment;
-    }
-  }
 }
