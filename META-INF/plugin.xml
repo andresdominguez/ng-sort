@@ -35,6 +35,8 @@
     <!-- Add your actions here -->
     <action id="ngSort" class="com.andresdominguez.ngsort.SortArgsAction" text="Sort arguments"
             description="Sort @ngInject arguments"/>
+    <action id="ngRequired" class="com.andresdominguez.ngsort.NgRequiredAction" text="Make param required"
+            description="Make param required"/>
   </actions>
 
 </idea-plugin>
