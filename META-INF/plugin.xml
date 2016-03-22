@@ -1,16 +1,17 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
-  <name>Modulator</name>
+  <id>com.andresdominguez.ngsort</id>
+  <name>NgSort</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="code@karateca.com" url="http://www.andresdominguez.com">Andres Dominguez</vendor>
 
   <description><![CDATA[
-    Auto-complete google closure modules
-  ]]></description>
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+    ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+    Add change notes here.<br>
+    <em>most HTML tags may be used</em>
     ]]>
   </change-notes>
 
@@ -20,11 +21,6 @@
   <depends>JavaScript</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <completion.contributor implementationClass="com.google.modulator.modules.require.ModuleContributor" language="any" order="FIRST" />
-    <completion.contributor implementationClass="com.google.modulator.params.ParamsContributor" language="any" order="FIRST" />
-    <completion.contributor implementationClass="com.google.modulator.modules.jsdoc.JsDocContributor" language="any" order="FIRST" />
-
-    <applicationConfigurable instance="com.google.modulator.config.ModulatorConfigurable"/>
   </extensions>
 
   <application-components>
@@ -37,7 +33,8 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="sortArgs" class="com.andresdominguez.ngsort.SortArgsAction" text="ngsort" description="Sort args"/>
+    <action id="ngSort" class="com.andresdominguez.ngsort.SortArgsAction" text="Sort arguments"
+            description="Sort @ngInject arguments"/>
   </actions>
 
 </idea-plugin>
