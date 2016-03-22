@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort;
 
+import com.google.common.collect.Lists;
 import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.lang.javascript.psi.JSProperty;
 import com.intellij.lang.javascript.psi.jsdoc.JSDocTag;
@@ -46,10 +47,11 @@ public class SortArgsAction extends AnAction {
 
   @Nullable
   private CommentAndParamList findCommentAndParamList(PsiFile psiFile) {
-    int index = psiFile.getText().indexOf("@ngInject");
-    if (index == -1) {
+    List<Integer> indices = findNgInjectIndices(psiFile);
+    if (indices.size() == 0) {
       return null;
     }
+    int index = indices.get(0);
 
     PsiElement ngInjectElement = psiFile.findElementAt(index);
     PsiComment comment = PsiTreeUtil.getParentOfType(ngInjectElement, PsiComment.class);
@@ -62,5 +64,18 @@ public class SortArgsAction extends AnAction {
     JSParameterList parameterList = parameterLists.iterator().next();
 
     return new CommentAndParamList(parameterList, comment);
+  }
+
+  List<Integer> findNgInjectIndices(PsiFile psiFile) {
+    String text = psiFile.getText();
+    ArrayList<Integer> indices = Lists.newArrayList();
+
+    int index = text.indexOf("@ngInject");
+    while (index != -1) {
+      indices.add(index);
+      index = text.indexOf("@ngInject", index + 1);
+    }
+
+    return indices;
   }
 }
