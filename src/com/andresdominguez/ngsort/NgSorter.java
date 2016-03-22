@@ -31,6 +31,27 @@ public class NgSorter {
     this.commentAndParamList = commentAndParamList;
   }
 
+  public void sort() {
+    final String fileText = document.getText();
+    final List<JSDocTag> paramsInComments = NgSorter.findParamsInComments(commentAndParamList.comment);
+    final List<JSDocTag> sortedParams = NgSorter.getSortedCommentParams(paramsInComments);
+
+    Collections.reverse(paramsInComments);
+
+    // Replace from bottom to top. Start with the function args.
+    NgSorter.sortFunctionArgs(commentAndParamList.parameterList, document);
+
+    // Replace @param tags in reverse order.
+    for (int i = 0; i < paramsInComments.size(); i++) {
+      JSDocTag jsDocTag = sortedParams.get(i);
+      String substring = NgSorter.getParamText(fileText, jsDocTag);
+
+      TextRange range = NgSorter.getTextRange(paramsInComments.get(i));
+
+      document.replaceString(range.getStartOffset(), range.getEndOffset(), substring);
+    }
+  }
+
   static void sortFunctionArgs(JSParameterList parameterList, Document document) {
     List<String> sortedArgs = new ArrayList<>();
     for (JSParameter parameter : parameterList.getParameters()) {

@@ -29,36 +29,17 @@ public class SortArgsAction extends AnAction {
       return;
     }
 
-    final Document document = editor.getDocument();
-
     final CommentAndParamList commentAndParamList = findCommentAndParamList(psiFile);
     if (commentAndParamList == null) {
       return;
     }
 
-//    new NgSorter(document, commentAndParamList);
-
-    final String fileText = document.getText();
-    final List<JSDocTag> paramsInComments = NgSorter.findParamsInComments(commentAndParamList.comment);
-    final List<JSDocTag> sortedParams = NgSorter.getSortedCommentParams(paramsInComments);
-
-    Collections.reverse(paramsInComments);
+    final NgSorter ngSorter = new NgSorter(editor.getDocument(), commentAndParamList);
 
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
-        // Replace from bottom to top. Start with the function args.
-        NgSorter.sortFunctionArgs(commentAndParamList.parameterList, document);
-
-        // Replace @param tags in reverse order.
-        for (int i = 0; i < paramsInComments.size(); i++) {
-          JSDocTag jsDocTag = sortedParams.get(i);
-          String substring = NgSorter.getParamText(fileText, jsDocTag);
-
-          TextRange range = NgSorter.getTextRange(paramsInComments.get(i));
-
-          document.replaceString(range.getStartOffset(), range.getEndOffset(), substring);
-        }
+        ngSorter.sort();
       }
     }, "ng sort", null);
   }
