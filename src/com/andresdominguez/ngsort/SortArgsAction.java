@@ -1,6 +1,7 @@
 package com.andresdominguez.ngsort;
 
 import com.google.common.collect.Lists;
+import com.intellij.lang.javascript.psi.JSExpressionStatement;
 import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.lang.javascript.psi.JSProperty;
 import com.intellij.lang.javascript.psi.JSVarStatement;
@@ -23,6 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class SortArgsAction extends AnAction {
+
+  public static final Class[] ELEMENT_TYPES =
+      new Class[]{JSProperty.class, JSVarStatement.class, JSExpressionStatement.class};
 
   @Override
   public void actionPerformed(AnActionEvent e) {
@@ -65,24 +69,20 @@ public class SortArgsAction extends AnAction {
   private JSParameterList findParameterList(PsiElement ngInjectElement) {
     // The function can be declared as:
     // theName: function()
-    // or
-    // var theName = function
-    PsiElement argsParent = null;
-    JSProperty jsProperty = PsiTreeUtil.getParentOfType(ngInjectElement, JSProperty.class);
-    JSVarStatement jsVarStatement = PsiTreeUtil.getParentOfType(ngInjectElement, JSVarStatement.class);
+    // var theName = function()
+    // MyModule.theName = function()
+    for (Class elementType : ELEMENT_TYPES) {
+      PsiElement parent = PsiTreeUtil.getParentOfType(ngInjectElement, elementType);
+      if (parent != null) {
+        Collection<JSParameterList> parameterLists = PsiTreeUtil.findChildrenOfType(parent, JSParameterList.class);
+        if (parameterLists.size() != 1) {
+          return null;
+        }
 
-    if (jsProperty != null) {
-      argsParent = jsProperty;
-    } else if (jsVarStatement != null) {
-      argsParent = jsVarStatement;
+        return parameterLists.iterator().next();
+      }
     }
-
-    Collection<JSParameterList> parameterLists = PsiTreeUtil.findChildrenOfType(argsParent, JSParameterList.class);
-    if (parameterLists.size() != 1) {
-      return null;
-    }
-
-    return parameterLists.iterator().next();
+    return null;
   }
 
   @NotNull
