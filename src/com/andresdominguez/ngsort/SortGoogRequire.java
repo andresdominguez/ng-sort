@@ -57,8 +57,8 @@ public class SortGoogRequire extends AnAction {
   }
 
   @NotNull
-  private List<RequireAndVarName> sortByVarName(List<RequireAndVarName> cholo) {
-    List<RequireAndVarName> sortedCopy = Lists.newArrayList(cholo);
+  private List<RequireAndVarName> sortByVarName(List<RequireAndVarName> list) {
+    List<RequireAndVarName> sortedCopy = Lists.newArrayList(list);
     Collections.sort(sortedCopy, new Comparator<RequireAndVarName>() {
       @Override
       public int compare(RequireAndVarName left, RequireAndVarName right) {
