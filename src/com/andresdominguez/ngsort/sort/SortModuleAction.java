@@ -37,7 +37,7 @@ public class SortModuleAction extends AnAction {
 
     final List<PsiElement> moduleElements = findArrayElements(arrayLiteralExpression);
     final Document document = editor.getDocument();
-    final List<PsiElement> sorted = sort(moduleElements);
+    final List<PsiElement> sorted = sortByText(moduleElements);
 
     Collections.reverse(moduleElements);
 
@@ -63,7 +63,7 @@ public class SortModuleAction extends AnAction {
     return moduleElements;
   }
 
-  private static List<PsiElement> sort(Collection<PsiElement> elements) {
+  private static List<PsiElement> sortByText(Collection<PsiElement> elements) {
     List<PsiElement> list = new ArrayList<>(elements);
     Collections.sort(list, new Comparator<PsiElement>() {
       @Override
