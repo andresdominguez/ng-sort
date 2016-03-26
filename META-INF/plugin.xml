@@ -39,6 +39,8 @@
             description="Make param required"/>
     <action id="sortParamList" class="com.andresdominguez.ngsort.SortParamListAction" text="Sort argument list"
             description="Sort argument list"/>
+    <action id="sortVars" class="com.andresdominguez.ngsort.SortVarsAction" text="Sort vars"
+            description="Sort variables"/>
   </actions>
 
 </idea-plugin>
