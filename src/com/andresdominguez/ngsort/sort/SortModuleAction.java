@@ -63,7 +63,7 @@ public class SortModuleAction extends AnAction {
     return moduleElements;
   }
 
-  private List<PsiElement> sort(Collection<PsiElement> elements) {
+  private static List<PsiElement> sort(Collection<PsiElement> elements) {
     List<PsiElement> list = new ArrayList<>(elements);
     Collections.sort(list, new Comparator<PsiElement>() {
       @Override
