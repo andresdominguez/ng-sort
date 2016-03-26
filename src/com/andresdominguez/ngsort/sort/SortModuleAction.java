@@ -8,13 +8,15 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class SortModuleAction extends AnAction {
 
@@ -37,7 +39,7 @@ public class SortModuleAction extends AnAction {
 
     final List<PsiElement> moduleElements = findArrayElements(arrayLiteralExpression);
     final Document document = editor.getDocument();
-    final List<PsiElement> sorted = sortByText(moduleElements);
+    final List<PsiElement> sorted = NgSorter.sortByText(moduleElements);
 
     Collections.reverse(moduleElements);
 
@@ -61,16 +63,5 @@ public class SortModuleAction extends AnAction {
       }
     }
     return moduleElements;
-  }
-
-  private static List<PsiElement> sortByText(Collection<PsiElement> elements) {
-    List<PsiElement> list = new ArrayList<>(elements);
-    Collections.sort(list, new Comparator<PsiElement>() {
-      @Override
-      public int compare(PsiElement o1, PsiElement o2) {
-        return o2.getText().compareTo(o1.getText());
-      }
-    });
-    return list;
   }
 }

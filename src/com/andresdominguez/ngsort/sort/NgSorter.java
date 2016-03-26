@@ -1,6 +1,5 @@
 package com.andresdominguez.ngsort.sort;
 
-import com.andresdominguez.ngsort.sort.CommentAndParamList;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -17,10 +16,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 class NgSorter {
 
@@ -30,6 +26,17 @@ class NgSorter {
   public NgSorter(Document document, CommentAndParamList commentAndParamList) {
     this.document = document;
     this.commentAndParamList = commentAndParamList;
+  }
+
+  static List<PsiElement> sortByText(Collection<PsiElement> elements) {
+    List<PsiElement> list = new ArrayList<>(elements);
+    Collections.sort(list, new Comparator<PsiElement>() {
+      @Override
+      public int compare(PsiElement o1, PsiElement o2) {
+        return o2.getText().compareTo(o1.getText());
+      }
+    });
+    return list;
   }
 
   public void sort() {
