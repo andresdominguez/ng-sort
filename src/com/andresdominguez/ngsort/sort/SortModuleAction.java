@@ -73,14 +73,4 @@ public class SortModuleAction extends AnAction {
     });
     return list;
   }
-
-  private void changePositions(Document document, List<JSExpression> oldOrderReversed, List<JSExpression> newOrder) {
-    for (int i = 0, newOrderReversedSize = newOrder.size(); i < newOrderReversedSize; i++) {
-      JSExpression oldExpr = oldOrderReversed.get(i);
-      PsiElement psiElement = newOrder.get(i);
-
-      TextRange textRange = oldExpr.getTextRange();
-      document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), psiElement.getText());
-    }
-  }
 }
