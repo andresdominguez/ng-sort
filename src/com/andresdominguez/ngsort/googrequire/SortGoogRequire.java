@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort.googrequire;
 
+import com.andresdominguez.ngsort.Sorter;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -13,7 +14,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -40,20 +41,22 @@ public class SortGoogRequire extends AnAction {
     Collections.reverse(list);
     final List<RequireAndVarName> sortedCopy = sortByVarName(list);
 
+    final List<PsiElement> elementList = new ArrayList<>();
+    for (RequireAndVarName requireAndVarName : list) {
+      elementList.add(requireAndVarName.varStatement);
+    }
+
+    final List<PsiElement> sortedElements = new ArrayList<>();
+    for (RequireAndVarName requireAndVarName : sortedCopy) {
+      sortedElements.add(requireAndVarName.varStatement);
+    }
+
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
-        for (int i = 0, listSize = list.size(); i < listSize; i++) {
-          JSVarStatement originalVar = list.get(i).varStatement;
-          JSVarStatement replacementVar = sortedCopy.get(i).varStatement;
-
-          TextRange textRange = originalVar.getTextRange();
-
-          document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), replacementVar.getText());
-        }
+        Sorter.changeElementsOrder(document, elementList, sortedElements);
       }
     }, "ng sort", null);
-
   }
 
   @NotNull

@@ -28,17 +28,6 @@ class NgSorter {
     this.commentAndParamList = commentAndParamList;
   }
 
-  static List<PsiElement> sortByText(Collection<PsiElement> elements) {
-    List<PsiElement> list = new ArrayList<>(elements);
-    Collections.sort(list, new Comparator<PsiElement>() {
-      @Override
-      public int compare(PsiElement o1, PsiElement o2) {
-        return o2.getText().compareTo(o1.getText());
-      }
-    });
-    return list;
-  }
-
   public void sort() {
     final String fileText = document.getText();
     final List<JSDocTag> paramsInComments = findParamsInComments(commentAndParamList.comment);
@@ -72,16 +61,6 @@ class NgSorter {
     int endOffset = parameterList.getTextLength() + startOffset - 2;
 
     document.replaceString(startOffset, endOffset, args);
-  }
-
-  static void changeElementsOrder(Document document, List<PsiElement> fromOrder, List<PsiElement> toOrder) {
-    for (int i = 0, fromOrderSize = fromOrder.size(); i < fromOrderSize; i++) {
-      PsiElement fromElement = fromOrder.get(i);
-      PsiElement toElement = toOrder.get(i);
-
-      TextRange textRange = fromElement.getTextRange();
-      document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), toElement.getText());
-    }
   }
 
   @NotNull

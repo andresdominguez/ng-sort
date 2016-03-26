@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort.sort;
 
+import com.andresdominguez.ngsort.Sorter;
 import com.intellij.lang.javascript.psi.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -39,14 +40,14 @@ public class SortModuleAction extends AnAction {
 
     final List<PsiElement> moduleElements = findArrayElements(arrayLiteralExpression);
     final Document document = editor.getDocument();
-    final List<PsiElement> sorted = NgSorter.sortByText(moduleElements);
+    final List<PsiElement> sorted = Sorter.sortByText(moduleElements);
 
     Collections.reverse(moduleElements);
 
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
-        NgSorter.changeElementsOrder(document, moduleElements, sorted);
+        Sorter.changeElementsOrder(document, moduleElements, sorted);
       }
     }, "ng sort", null);
   }
