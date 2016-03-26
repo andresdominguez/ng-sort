@@ -1,6 +1,7 @@
 package com.andresdominguez.ngsort.googrequire;
 
 import com.andresdominguez.ngsort.Sorter;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -26,6 +27,13 @@ import java.util.List;
 
 public class SortGoogRequire extends AnAction {
 
+  private final Function<RequireAndVarName, PsiElement> TO_PSI_ELEMENT = new Function<RequireAndVarName, PsiElement>() {
+    @Override
+    public PsiElement apply(RequireAndVarName requireAndVarName) {
+      return requireAndVarName.varStatement;
+    }
+  };
+
   @Override
   public void actionPerformed(AnActionEvent e) {
     final Editor editor = e.getData(PlatformDataKeys.EDITOR);
@@ -35,21 +43,13 @@ public class SortGoogRequire extends AnAction {
     }
 
     final Document document = editor.getDocument();
-
     final List<RequireAndVarName> list = findGoogVarsWithGoogRequire(psiFile);
+
     // Sort form bottom to top.
     Collections.reverse(list);
-    final List<RequireAndVarName> sortedCopy = sortByVarName(list);
 
-    final List<PsiElement> elementList = new ArrayList<>();
-    for (RequireAndVarName requireAndVarName : list) {
-      elementList.add(requireAndVarName.varStatement);
-    }
-
-    final List<PsiElement> sortedElements = new ArrayList<>();
-    for (RequireAndVarName requireAndVarName : sortedCopy) {
-      sortedElements.add(requireAndVarName.varStatement);
-    }
+    final List<PsiElement> sortedElements = sortByVarName(list);
+    final List<PsiElement> elementList = Lists.transform(list, TO_PSI_ELEMENT);
 
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
@@ -60,7 +60,7 @@ public class SortGoogRequire extends AnAction {
   }
 
   @NotNull
-  private List<RequireAndVarName> sortByVarName(List<RequireAndVarName> list) {
+  private List<PsiElement> sortByVarName(List<RequireAndVarName> list) {
     List<RequireAndVarName> sortedCopy = Lists.newArrayList(list);
     Collections.sort(sortedCopy, new Comparator<RequireAndVarName>() {
       @Override
@@ -68,7 +68,7 @@ public class SortGoogRequire extends AnAction {
         return right.varName.compareTo(left.varName);
       }
     });
-    return sortedCopy;
+    return Lists.transform(sortedCopy, TO_PSI_ELEMENT);
   }
 
   @NotNull
