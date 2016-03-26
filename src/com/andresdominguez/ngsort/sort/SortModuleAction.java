@@ -35,23 +35,23 @@ public class SortModuleAction extends AnAction {
     JSCallExpression callExpression = PsiTreeUtil.getParentOfType(element, JSCallExpression.class);
     JSArrayLiteralExpression arrayLiteralExpression = PsiTreeUtil.findChildOfType(callExpression, JSArrayLiteralExpression.class);
 
-    final List<JSExpression> moduleElements = findArrayElements(arrayLiteralExpression);
+    final List<PsiElement> moduleElements = findArrayElements(arrayLiteralExpression);
     final Document document = editor.getDocument();
-    final List<JSExpression> sorted = sort(moduleElements);
+    final List<PsiElement> sorted = sort(moduleElements);
 
     Collections.reverse(moduleElements);
 
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
-        changePositions(document, moduleElements, sorted);
+        NgSorter.changeElementsOrder(document, moduleElements, sorted);
       }
     }, "ng sort", null);
   }
 
   @NotNull
-  private List<JSExpression> findArrayElements(JSArrayLiteralExpression arrayLiteralExpr) {
-    List<JSExpression> moduleElements = new ArrayList<>();
+  private List<PsiElement> findArrayElements(JSArrayLiteralExpression arrayLiteralExpr) {
+    List<PsiElement> moduleElements = new ArrayList<>();
     Collection<JSExpression> items =
         PsiTreeUtil.findChildrenOfAnyType(arrayLiteralExpr, JSLiteralExpression.class, JSReferenceExpression.class);
     for (JSExpression jsExpression : items) {
@@ -63,8 +63,8 @@ public class SortModuleAction extends AnAction {
     return moduleElements;
   }
 
-  private List<JSExpression> sort(Collection<JSExpression> expressions) {
-    ArrayList<JSExpression> list = new ArrayList<>(expressions);
+  private List<PsiElement> sort(Collection<PsiElement> elements) {
+    List<PsiElement> list = new ArrayList<>(elements);
     Collections.sort(list, new Comparator<PsiElement>() {
       @Override
       public int compare(PsiElement o1, PsiElement o2) {

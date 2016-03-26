@@ -53,7 +53,7 @@ class NgSorter {
     }
   }
 
-  public static void sortFunctionArgs(JSParameterList parameterList, Document document) {
+  static void sortFunctionArgs(JSParameterList parameterList, Document document) {
     List<String> sortedArgs = new ArrayList<>();
     for (JSParameter parameter : parameterList.getParameters()) {
       sortedArgs.add(parameter.getName());
@@ -65,6 +65,16 @@ class NgSorter {
     int endOffset = parameterList.getTextLength() + startOffset - 2;
 
     document.replaceString(startOffset, endOffset, args);
+  }
+
+  static void changeElementsOrder(Document document, List<PsiElement> fromOrder, List<PsiElement> toOrder) {
+    for (int i = 0, fromOrderSize = fromOrder.size(); i < fromOrderSize; i++) {
+      PsiElement fromElement = fromOrder.get(i);
+      PsiElement toElement = toOrder.get(i);
+
+      TextRange textRange = fromElement.getTextRange();
+      document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), toElement.getText());
+    }
   }
 
   @NotNull
