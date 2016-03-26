@@ -43,7 +43,7 @@
             description="Sort variables"/>
     <action id="sortGoogRequire" class="com.andresdominguez.ngsort.SortGoogRequire" text="Sort goog require"
             description="Sort goog require"/>
-    <action id="googVar" class="com.andresdominguez.ngsort.GoogVarAction" text="goog var" description="goog var"/>
+    <action id="googVar" class="com.andresdominguez.ngsort.googvar.GoogVarAction" text="goog var" description="goog var"/>
   </actions>
 
 </idea-plugin>

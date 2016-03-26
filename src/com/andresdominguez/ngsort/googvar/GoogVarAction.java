@@ -1,4 +1,4 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.googvar;
 
 import com.google.common.collect.Iterables;
 import com.intellij.lang.javascript.psi.JSExpressionStatement;
