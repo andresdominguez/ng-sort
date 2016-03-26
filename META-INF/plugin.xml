@@ -41,6 +41,8 @@
             description="Sort argument list"/>
     <action id="sortVars" class="com.andresdominguez.ngsort.SortVarsAction" text="Sort vars"
             description="Sort variables"/>
+    <action id="sortGoogRequire" class="com.andresdominguez.ngsort.SortGoogRequire" text="Sort goog require"
+            description="Sort goog require"/>
   </actions>
 
 </idea-plugin>
