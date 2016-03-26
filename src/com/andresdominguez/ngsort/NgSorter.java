@@ -52,7 +52,7 @@ public class NgSorter {
     }
   }
 
-  private void sortFunctionArgs(JSParameterList parameterList, Document document) {
+  public static void sortFunctionArgs(JSParameterList parameterList, Document document) {
     List<String> sortedArgs = new ArrayList<>();
     for (JSParameter parameter : parameterList.getParameters()) {
       sortedArgs.add(parameter.getName());

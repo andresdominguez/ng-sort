@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class SortArgsAction extends AnAction {
+public class SortNgInjectAction extends AnAction {
 
   public static final Class[] ELEMENT_TYPES =
       new Class[]{JSProperty.class, JSVarStatement.class, JSExpressionStatement.class};
