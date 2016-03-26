@@ -33,17 +33,17 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="ngSort" class="com.andresdominguez.ngsort.SortNgInjectAction" text="Sort ng inject"
+    <action id="ngSort" class="com.andresdominguez.ngsort.sort.SortNgInjectAction" text="Sort ng inject"
             description="Sort @ngInject arguments"/>
     <action id="ngRequired" class="com.andresdominguez.ngsort.NgRequiredAction" text="Make param required"
             description="Make param required"/>
-    <action id="sortParamList" class="com.andresdominguez.ngsort.SortParamListAction" text="Sort argument list"
+    <action id="sortParamList" class="com.andresdominguez.ngsort.sort.SortParamListAction" text="Sort argument list"
             description="Sort argument list"/>
-    <action id="sortVars" class="com.andresdominguez.ngsort.SortVarsAction" text="Sort vars"
+    <action id="sortVars" class="com.andresdominguez.ngsort.sort.SortVarsAction" text="Sort vars"
             description="Sort variables"/>
-    <action id="sortGoogRequire" class="com.andresdominguez.ngsort.SortGoogRequire" text="Sort goog require"
+    <action id="sortGoogRequire" class="com.andresdominguez.ngsort.googrequire.SortGoogRequire" text="Sort goog require"
             description="Sort goog require"/>
-    <action id="googVar" class="com.andresdominguez.ngsort.googvar.GoogVarAction" text="goog var" description="goog var"/>
+    <action id="googVar" class="com.andresdominguez.ngsort.googrequire.GoogVarAction" text="goog var" description="goog var"/>
   </actions>
 
 </idea-plugin>

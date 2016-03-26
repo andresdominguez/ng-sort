@@ -1,4 +1,4 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.googrequire;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

@@ -1,4 +1,4 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.sort;
 
 import com.google.common.collect.Lists;
 import com.intellij.lang.javascript.psi.JSExpressionStatement;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SortNgInjectAction extends AnAction {
 
-  public static final Class[] ELEMENT_TYPES =
+  private static final Class[] ELEMENT_TYPES =
       new Class[]{JSProperty.class, JSVarStatement.class, JSExpressionStatement.class};
 
   @Override

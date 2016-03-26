@@ -1,9 +1,9 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.sort;
 
 import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.psi.PsiComment;
 
-public class CommentAndParamList {
+class CommentAndParamList {
   final JSParameterList parameterList;
   final PsiComment comment;
 

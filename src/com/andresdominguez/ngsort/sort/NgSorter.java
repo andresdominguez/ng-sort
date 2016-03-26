@@ -1,5 +1,6 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.sort;
 
+import com.andresdominguez.ngsort.sort.CommentAndParamList;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -21,7 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class NgSorter {
+class NgSorter {
 
   private final Document document;
   private final CommentAndParamList commentAndParamList;

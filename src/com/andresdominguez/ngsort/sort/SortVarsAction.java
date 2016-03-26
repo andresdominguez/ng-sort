@@ -1,4 +1,4 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.sort;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;

@@ -1,4 +1,4 @@
-package com.andresdominguez.ngsort;
+package com.andresdominguez.ngsort.sort;
 
 import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.openapi.actionSystem.AnAction;
