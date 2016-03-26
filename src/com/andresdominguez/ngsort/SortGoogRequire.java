@@ -95,7 +95,7 @@ public class SortGoogRequire extends AnAction {
         }));
   }
 
-  class RequireAndVarName {
+  private class RequireAndVarName {
     final String varName;
     final JSVarStatement varStatement;
 
