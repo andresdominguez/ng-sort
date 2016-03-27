@@ -25,7 +25,7 @@ public class ToArrowFunctionAction extends AnAction {
     }
 
     PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    JSFunctionExpression functionExpr = PsiTreeUtil.getParentOfType(element, JSFunctionExpression.class);
+    final JSFunctionExpression functionExpr = PsiTreeUtil.getParentOfType(element, JSFunctionExpression.class);
     if (functionExpr == null) {
       return;
     }
@@ -41,9 +41,13 @@ public class ToArrowFunctionAction extends AnAction {
       public void run() {
         // Add =>
         TextRange fnBlockRange = fnBlock.getTextRange();
-
         document.replaceString(fnBlockRange.getStartOffset(), fnBlockRange.getEndOffset(),
             String.format("=> %s", fnBlock.getText()));
+
+        // Migrate function() to ()
+        int startOffset = functionExpr.getTextRange().getStartOffset();
+        int endOffset = startOffset + functionExpr.getText().indexOf("(");
+        document.replaceString(startOffset, endOffset, "");
       }
     }, "ng sort", null);
 
