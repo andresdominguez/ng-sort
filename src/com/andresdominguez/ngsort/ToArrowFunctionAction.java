@@ -2,6 +2,7 @@ package com.andresdominguez.ngsort;
 
 import com.intellij.lang.javascript.psi.JSBlockStatement;
 import com.intellij.lang.javascript.psi.JSFunctionExpression;
+import com.intellij.lang.javascript.psi.JSParameterList;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -30,23 +31,38 @@ public class ToArrowFunctionAction extends AnAction {
       return;
     }
 
+    final JSParameterList paramList = PsiTreeUtil.findChildOfType(functionExpr, JSParameterList.class);
+    if (paramList == null) {
+      return;
+    }
+
     final JSBlockStatement fnBlock = PsiTreeUtil.findChildOfType(functionExpr, JSBlockStatement.class);
     if (fnBlock == null) {
       return;
     }
+
+    final TextRange fnBlockRange = fnBlock.getTextRange();
+    final TextRange paramListRange = paramList.getTextRange();
 
     final Document document = editor.getDocument();
     CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         // Add =>
-        TextRange fnBlockRange = fnBlock.getTextRange();
         document.replaceString(fnBlockRange.getStartOffset(), fnBlockRange.getEndOffset(),
             String.format("=> %s", fnBlock.getText()));
 
         // Migrate function() to ()
+        boolean shouldDropParens = paramList.getParameters().length == 1;
+        if (shouldDropParens) {
+          int startOffset = paramListRange.getStartOffset();
+          int endOffset = paramListRange.getEndOffset();
+          String replacement = paramList.getText().replace("(", "").replace(")", "");
+          document.replaceString(startOffset, endOffset, replacement);
+        }
+
         int startOffset = functionExpr.getTextRange().getStartOffset();
-        int endOffset = startOffset + functionExpr.getText().indexOf("(");
+        int endOffset = paramListRange.getStartOffset();
         document.replaceString(startOffset, endOffset, "");
       }
     }, "ng sort", null);
