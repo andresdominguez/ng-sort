@@ -3,13 +3,13 @@ package com.andresdominguez.ngsort.sort;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.javascript.psi.JSVarStatement;
 import com.intellij.lang.javascript.psi.JSVariable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.andresdominguez.ngsort.CommandRunner.runCommand;
 
 public class SortVarsAction extends AnAction {
 
@@ -33,6 +35,7 @@ public class SortVarsAction extends AnAction {
 
     List<JSVariable> jsVariables = findVariables(editor, psiFile);
     if (jsVariables.size() == 0) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find variable");
       return;
     }
     JSVariable last = Iterables.getLast(jsVariables);
@@ -40,14 +43,14 @@ public class SortVarsAction extends AnAction {
     final int startOffset = jsVariables.get(0).getTextOffset();
     final int endOffset = last.getTextOffset() + last.getTextLength();
     final String sortedString = getSortedString(jsVariables);
-
     final Document document = editor.getDocument();
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+
+    runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         document.replaceString(startOffset, endOffset, sortedString);
       }
-    }, "ng sort", null);
+    });
   }
 
   @NotNull
