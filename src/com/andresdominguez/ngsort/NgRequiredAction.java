@@ -1,18 +1,20 @@
 package com.andresdominguez.ngsort;
 
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.javascript.psi.jsdoc.JSDocTag;
 import com.intellij.lang.javascript.psi.jsdoc.JSDocTagValue;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+
+import static com.andresdominguez.ngsort.CommandRunner.runCommand;
 
 public class NgRequiredAction extends AnAction {
 
@@ -28,6 +30,7 @@ public class NgRequiredAction extends AnAction {
     JSDocTag jsDocTag = PsiTreeUtil.getParentOfType(element, JSDocTag.class);
 
     if (jsDocTag == null || jsDocTag.getValue() == null) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find jsdoc tag");
       return;
     }
 
@@ -35,12 +38,12 @@ public class NgRequiredAction extends AnAction {
     final TextRange textRange = value.getTextRange();
     final Document document = editor.getDocument();
 
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+    runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         String replacement = value.getText().replace("{", "{!");
         document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), replacement);
       }
-    }, "make required", null);
+    });
   }
 }
