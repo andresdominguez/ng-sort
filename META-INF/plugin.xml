@@ -46,6 +46,8 @@
     <action id="googVar" class="com.andresdominguez.ngsort.googrequire.GoogVarAction" text="goog var" description="goog var"/>
     <action id="sortModuleAction" class="com.andresdominguez.ngsort.sort.SortModuleAction" text="Sort ng module"
             description="Sort ng module"/>
+    <action id="toArrowFunctionAction" class="com.andresdominguez.ngsort.ToArrowFunctionAction" text="To arrow function"
+            description="To arrow function"/>
   </actions>
 
 </idea-plugin>
