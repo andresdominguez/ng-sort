@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort.googrequire;
 
+import com.andresdominguez.ngsort.CommandRunner;
 import com.andresdominguez.ngsort.Sorter;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -12,7 +13,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -51,12 +51,12 @@ public class SortGoogRequire extends AnAction {
     final List<PsiElement> sortedElements = sortByVarName(list);
     final List<PsiElement> elementList = Lists.transform(list, TO_PSI_ELEMENT);
 
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         Sorter.changeElementsOrder(document, elementList, sortedElements);
       }
-    }, "ng sort", null);
+    });
   }
 
   @NotNull
