@@ -1,13 +1,14 @@
 package com.andresdominguez.ngsort.googrequire;
 
+import com.andresdominguez.ngsort.CommandRunner;
 import com.google.common.collect.Iterables;
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.javascript.psi.JSExpressionStatement;
 import com.intellij.lang.javascript.psi.JSLiteralExpression;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
@@ -28,12 +29,9 @@ public class GoogVarAction extends AnAction {
     }
 
     PsiElement currentElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    if (currentElement == null) {
-      return;
-    }
-
     JSExpressionStatement exprStmt = PsiTreeUtil.getParentOfType(currentElement, JSExpressionStatement.class);
     if (exprStmt == null) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find goog.require");
       return;
     }
 
@@ -41,12 +39,12 @@ public class GoogVarAction extends AnAction {
     final int offset = exprStmt.getTextOffset();
     final String varName = getVarName(exprStmt);
 
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         document.replaceString(offset, offset, varName);
       }
-    }, "ng sort", null);
+    });
   }
 
   private String getVarName(JSExpressionStatement expressionStatement) {
