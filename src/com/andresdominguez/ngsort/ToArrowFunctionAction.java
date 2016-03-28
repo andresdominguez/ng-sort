@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort;
 
+import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.lang.javascript.psi.JSBlockStatement;
 import com.intellij.lang.javascript.psi.JSFunctionExpression;
 import com.intellij.lang.javascript.psi.JSParameterList;
@@ -7,7 +8,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
@@ -28,16 +28,19 @@ public class ToArrowFunctionAction extends AnAction {
     PsiElement element = psiFile.findElementAt(editor.getCaretModel().getOffset());
     final JSFunctionExpression functionExpr = PsiTreeUtil.getParentOfType(element, JSFunctionExpression.class);
     if (functionExpr == null) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find function");
       return;
     }
 
     final JSParameterList paramList = PsiTreeUtil.findChildOfType(functionExpr, JSParameterList.class);
     if (paramList == null) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find functions parameters");
       return;
     }
 
     final JSBlockStatement fnBlock = PsiTreeUtil.findChildOfType(functionExpr, JSBlockStatement.class);
     if (fnBlock == null) {
+      HintManager.getInstance().showErrorHint(editor, "Can't find function block");
       return;
     }
 
@@ -45,7 +48,7 @@ public class ToArrowFunctionAction extends AnAction {
     final TextRange paramListRange = paramList.getTextRange();
 
     final Document document = editor.getDocument();
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         // Add =>
@@ -65,7 +68,6 @@ public class ToArrowFunctionAction extends AnAction {
         int endOffset = paramListRange.getStartOffset();
         document.replaceString(startOffset, endOffset, "");
       }
-    }, "ng sort", null);
-
+    });
   }
 }
