@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort.sort;
 
+import com.andresdominguez.ngsort.CommandRunner;
 import com.google.common.collect.Lists;
 import com.intellij.lang.javascript.psi.JSExpressionStatement;
 import com.intellij.lang.javascript.psi.JSParameterList;
@@ -9,7 +10,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiComment;
@@ -42,14 +42,14 @@ public class SortNgInjectAction extends AnAction {
 
     final Document document = editor.getDocument();
 
-    CommandProcessor.getInstance().executeCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         for (CommentAndParamList commentAndParamList : list) {
           new NgSorter(document, commentAndParamList).sort();
         }
       }
-    }, "ng sort", null);
+    });
   }
 
   @Nullable
