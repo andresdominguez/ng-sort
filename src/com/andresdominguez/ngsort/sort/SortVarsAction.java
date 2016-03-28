@@ -1,5 +1,6 @@
 package com.andresdominguez.ngsort.sort;
 
+import com.andresdominguez.ngsort.CommandRunner;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -20,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.andresdominguez.ngsort.CommandRunner.runCommand;
 
 public class SortVarsAction extends AnAction {
 
@@ -45,7 +44,7 @@ public class SortVarsAction extends AnAction {
     final String sortedString = getSortedString(jsVariables);
     final Document document = editor.getDocument();
 
-    runCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         document.replaceString(startOffset, endOffset, sortedString);

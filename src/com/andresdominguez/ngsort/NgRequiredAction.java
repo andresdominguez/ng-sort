@@ -14,8 +14,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 
-import static com.andresdominguez.ngsort.CommandRunner.runCommand;
-
 public class NgRequiredAction extends AnAction {
 
   @Override
@@ -38,7 +36,7 @@ public class NgRequiredAction extends AnAction {
     final TextRange textRange = value.getTextRange();
     final Document document = editor.getDocument();
 
-    runCommand(getEventProject(e), new Runnable() {
+    CommandRunner.runCommand(getEventProject(e), new Runnable() {
       @Override
       public void run() {
         String replacement = value.getText().replace("{", "{!");
